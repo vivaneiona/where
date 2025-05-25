@@ -1,0 +1,7 @@
+.idea
+.vscode
+coverage.*
+webhookx
+*.log
+dist/
+test/output

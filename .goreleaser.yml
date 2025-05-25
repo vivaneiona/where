@@ -1,0 +1,27 @@
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+
+# This is a Go library, not a CLI application
+# Libraries don't need builds or binaries
+builds:
+  - skip: true
+
+archives:
+  - format: tar.gz
+    # use zip for windows archives
+    format_overrides:
+      - goos: windows
+        format: zip
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+
+checksum:
+  name_template: 'checksums.txt'
