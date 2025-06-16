@@ -1,35 +1,55 @@
 package where
 
+// Continent names
+const (
+	ContinentAsia         = "Asia"
+	ContinentEurope       = "Europe"
+	ContinentNorthAmerica = "North America"
+	ContinentSouthAmerica = "South America"
+	ContinentOceania      = "Oceania"
+	ContinentAfrica       = "Africa"
+)
+
+// Provider names
+const (
+	ProviderAWS     = "aws"
+	ProviderAzure   = "azure"
+	ProviderGCP     = "gcp"
+	ProviderYandex  = "yandex"
+	ProviderVK      = "vk"
+	ProviderAlibaba = "alibaba"
+)
+
 // InNamespace provides geographic-based region queries.
 // Usage: where.In.Asia(), where.In.Europe(), where.In.Country("Japan")
 type InNamespace struct{}
 
 // Asia returns all regions in Asia.
 func (InNamespace) Asia() Set {
-	return InContinent("Asia")
+	return InContinent(ContinentAsia)
 }
 
 // Europe returns all regions in Europe.
 func (InNamespace) Europe() Set {
-	return InContinent("Europe")
+	return InContinent(ContinentEurope)
 }
 
 // Americas returns all regions in North and South America.
 func (InNamespace) Americas() Set {
 	americas := make(Set, 0)
-	americas = append(americas, InContinent("North America")...)
-	americas = append(americas, InContinent("South America")...)
+	americas = append(americas, InContinent(ContinentNorthAmerica)...)
+	americas = append(americas, InContinent(ContinentSouthAmerica)...)
 	return americas
 }
 
 // Oceania returns all regions in Oceania.
 func (InNamespace) Oceania() Set {
-	return InContinent("Oceania")
+	return InContinent(ContinentOceania)
 }
 
 // Africa returns all regions in Africa.
 func (InNamespace) Africa() Set {
-	return InContinent("Africa")
+	return InContinent(ContinentAfrica)
 }
 
 // Country returns all regions in the specified country.
@@ -54,32 +74,32 @@ type ByNamespace struct {
 
 // AWS returns all AWS regions.
 func (ByNamespace) AWS() Set {
-	return ByProvider("aws")
+	return ByProvider(ProviderAWS)
 }
 
 // Azure returns all Azure regions.
 func (ByNamespace) Azure() Set {
-	return ByProvider("azure")
+	return ByProvider(ProviderAzure)
 }
 
 // GCP returns all Google Cloud Platform regions.
 func (ByNamespace) GCP() Set {
-	return ByProvider("gcp")
+	return ByProvider(ProviderGCP)
 }
 
 // Yandex returns all Yandex Cloud regions.
 func (ByNamespace) Yandex() Set {
-	return ByProvider("yandex")
+	return ByProvider(ProviderYandex)
 }
 
 // VK returns all VK Cloud regions.
 func (ByNamespace) VK() Set {
-	return ByProvider("vk")
+	return ByProvider(ProviderVK)
 }
 
 // Alibaba returns all Alibaba Cloud regions.
 func (ByNamespace) Alibaba() Set {
-	return ByProvider("alibaba")
+	return ByProvider(ProviderAlibaba)
 }
 
 // Provider returns all regions from the specified provider.
