@@ -3,7 +3,7 @@
 A Go library for discovering, querying, and working with cloud provider region names and codes across different cloud service providers.
 
 ```bash
-go get github.com/vivaneiona/where@v0.202505.1
+go get github.com/vivaneiona/where@v0.202506.0
 ```
 
 ## Project Status
