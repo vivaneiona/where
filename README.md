@@ -302,11 +302,11 @@ func errorHandlingExample() {
 	}
 
 	// Check if region exists
-	if where.Exists("us-east-1") {
+	if where.Has("us-east-1") {
 		fmt.Printf("  ✓ us-east-1 exists\n")
 	}
 
-	if !where.Exists("invalid-region") {
+	if !where.Has("invalid-region") {
 		fmt.Printf("  ✗ invalid-region does not exist\n")
 	}
 

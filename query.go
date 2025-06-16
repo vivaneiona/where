@@ -217,8 +217,8 @@ func (q *Query) Count() int {
 	return len(q.regions)
 }
 
-// Exists returns true if any regions match the query.
-func (q *Query) Exists() bool {
+// Has returns true if any regions match the query.
+func (q *Query) Has() bool {
 	return len(q.regions) > 0
 }
 

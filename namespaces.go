@@ -108,12 +108,12 @@ func (IsNamespace) Deprecated() Set {
 
 // Valid returns true if the region code exists.
 func (IsNamespace) Valid(code Code) bool {
-	return Exists(string(code))
+	return Has(string(code))
 }
 
-// Exists returns true if the region code exists (alias for Valid).
-func (IsNamespace) Exists(code Code) bool {
-	return Exists(string(code))
+// Has returns true if the region code exists (alias for Valid).
+func (IsNamespace) Has(code Code) bool {
+	return Has(string(code))
 }
 
 // NearNamespace provides proximity-based region queries.

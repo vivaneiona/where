@@ -100,8 +100,8 @@ func DeprecatedRegions() Set {
 
 // Validation functions with simple yes/no answers
 
-// Exists answers "where valid {code}?" - checks if a region code exists.
-func Exists(code string) bool {
+// Has answers "where valid {code}?" - checks if a region code exists.
+func Has(code string) bool {
 	_, exists := regionRegistry[Code(code)]
 	return exists
 }

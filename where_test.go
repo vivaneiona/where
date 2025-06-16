@@ -36,7 +36,7 @@ func TestIntegration(t *testing.T) {
 	})
 
 	t.Run("API workflow", func(t *testing.T) {
-		if !where.Exists("us-east-1") {
+		if !where.Has("us-east-1") {
 			t.Skip("us-east-1 not available for integration test")
 		}
 
@@ -99,7 +99,7 @@ func TestIntegration(t *testing.T) {
 		}
 
 		// Test using constants with API
-		if where.Exists(string(where.AWS.USEast1)) {
+		if where.Has(string(where.AWS.USEast1)) {
 			region := where.MustIs(where.AWS.USEast1)
 			if region.Provider != "aws" {
 				t.Errorf("Expected AWS provider, got %v", region.Provider)
@@ -191,7 +191,7 @@ func TestProviderNamespaces(t *testing.T) {
 		}
 
 		for _, code := range keyRegions {
-			if !where.Exists(string(code)) {
+			if !where.Has(string(code)) {
 				t.Errorf("Provider constant %v should map to valid region", code)
 			}
 		}
@@ -267,7 +267,7 @@ func TestRealWorldScenarios(t *testing.T) {
 
 func Example_integration() {
 	// Check if a region exists
-	if where.Exists("us-east-1") {
+	if where.Has("us-east-1") {
 		// Get region details
 		region, _ := where.Is("us-east-1")
 		fmt.Printf("Region: %s in %s\n", region.Name, region.Country)

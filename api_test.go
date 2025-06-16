@@ -123,7 +123,7 @@ func TestAre(t *testing.T) {
 	}
 }
 
-func TestExists(t *testing.T) {
+func TestHas(t *testing.T) {
 	tests := []struct {
 		name string
 		code string
@@ -148,8 +148,8 @@ func TestExists(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Exists(tt.code); got != tt.want {
-				t.Errorf("Exists() = %v, want %v", got, tt.want)
+			if got := Has(tt.code); got != tt.want {
+				t.Errorf("Has() = %v, want %v", got, tt.want)
 			}
 		})
 	}
