@@ -1,4 +1,4 @@
-# vivaneiona/where
+# where
 
 A Go library for discovering, querying, and working with cloud provider region names and codes across different cloud service providers.
 
@@ -158,16 +158,16 @@ func providerQueriesExample() {
 	//   AWS (alternative): 28 regions
 
 	// Provider-based queries using namespace
-	awsRegions := where.By.AWS()
-	azureRegions := where.By.Azure()
-	gcpRegions := where.By.GCP()
+	awsRegions := where.On.AWS()
+	azureRegions := where.On.Azure()
+	gcpRegions := where.On.GCP()
 
 	fmt.Printf("  AWS: %d regions\n", len(awsRegions))
 	fmt.Printf("  Azure: %d regions\n", len(azureRegions))
 	fmt.Printf("  GCP: %d regions\n", len(gcpRegions))
 
 	// Alternative provider query
-	awsRegions2 := where.By.Provider("aws")
+	awsRegions2 := where.On.Provider("aws")
 	fmt.Printf("  AWS (alternative): %d regions\n", len(awsRegions2))
 	fmt.Println()
 }
@@ -238,7 +238,7 @@ func distanceCalculationsExample() {
 
 	// Find closest AWS region to a specific location (San Francisco)
 	sfLat, sfLng := 37.7749, -122.4194
-	awsRegions := where.By.AWS()
+	awsRegions := where.On.AWS()
 	awsRegions.SortByDistance(sfLat, sfLng)
 	if len(awsRegions) > 0 {
 		closestToSF := awsRegions[0]
@@ -412,7 +412,7 @@ func practicalUseCasesExample() {
 	}
 
 	for city, coords := range userLocations {
-		awsRegions := where.By.AWS()
+		awsRegions := where.On.AWS()
 		awsRegions.SortByDistance(coords[0], coords[1])
 		if len(awsRegions) > 0 {
 			closest := awsRegions[0]

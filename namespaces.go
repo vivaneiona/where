@@ -67,44 +67,44 @@ func (InNamespace) Continent(name string) Set {
 	return InContinent(name)
 }
 
-// ByNamespace provides provider-based region queries.
-// Usage: where.By.AWS(), where.By.Azure(), where.By.Provider("gcp")
-type ByNamespace struct {
+// OnNamespace provides provider-based region queries.
+// Usage: where.On.AWS(), where.On.Azure(), where.On.Provider("gcp")
+type OnNamespace struct {
 }
 
 // AWS returns all AWS regions.
-func (ByNamespace) AWS() Set {
-	return ByProvider(ProviderAWS)
+func (OnNamespace) AWS() Set {
+	return OnProvider(ProviderAWS)
 }
 
 // Azure returns all Azure regions.
-func (ByNamespace) Azure() Set {
-	return ByProvider(ProviderAzure)
+func (OnNamespace) Azure() Set {
+	return OnProvider(ProviderAzure)
 }
 
 // GCP returns all Google Cloud Platform regions.
-func (ByNamespace) GCP() Set {
-	return ByProvider(ProviderGCP)
+func (OnNamespace) GCP() Set {
+	return OnProvider(ProviderGCP)
 }
 
 // Yandex returns all Yandex Cloud regions.
-func (ByNamespace) Yandex() Set {
-	return ByProvider(ProviderYandex)
+func (OnNamespace) Yandex() Set {
+	return OnProvider(ProviderYandex)
 }
 
 // VK returns all VK Cloud regions.
-func (ByNamespace) VK() Set {
-	return ByProvider(ProviderVK)
+func (OnNamespace) VK() Set {
+	return OnProvider(ProviderVK)
 }
 
 // Alibaba returns all Alibaba Cloud regions.
-func (ByNamespace) Alibaba() Set {
-	return ByProvider(ProviderAlibaba)
+func (OnNamespace) Alibaba() Set {
+	return OnProvider(ProviderAlibaba)
 }
 
 // Provider returns all regions from the specified provider.
-func (ByNamespace) Provider(name string) Set {
-	return ByProvider(name)
+func (OnNamespace) Provider(name string) Set {
+	return OnProvider(name)
 }
 
 // IsNamespace provides validation and status-based queries.
@@ -171,8 +171,8 @@ var (
 	// In provides geographic-based region queries.
 	In InNamespace
 
-	// By provides provider-based region queries.
-	By ByNamespace
+	// On provides provider-based region queries.
+	On OnNamespace
 
 	// Validation provides validation and status-based queries.
 	Validation IsNamespace

@@ -1,7 +1,7 @@
 MAJOR := "0"
 DATE_FORMAT := "%Y%m"
 DATE := datetime_utc(DATE_FORMAT)
-PATCH := "1"
+PATCH := "2"
 
 # scalver.org MAJOR.DATE.PATCH → MAJOR.YYYY[MM[DD]].PATCH
 VERSION := MAJOR + "." + DATE + "." + PATCH

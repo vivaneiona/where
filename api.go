@@ -69,8 +69,8 @@ func InContinent(name string) Set {
 	return allRegions().ByContinent(name)
 }
 
-// ByProvider answers "where by provider {name}?" - returns all regions from a provider.
-func ByProvider(name string) Set {
+// OnProvider answers "where by provider {name}?" - returns all regions from a provider.
+func OnProvider(name string) Set {
 	return allRegions().ByProvider(name)
 }
 

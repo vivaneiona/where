@@ -305,7 +305,7 @@ func TestFilteredQueries(t *testing.T) {
 	})
 
 	t.Run("ByProvider", func(t *testing.T) {
-		regions := ByProvider("aws")
+		regions := OnProvider("aws")
 		if len(regions) == 0 {
 			t.Error("ByProvider('aws') should return regions")
 		}
@@ -350,6 +350,6 @@ func BenchmarkAre(b *testing.B) {
 
 func BenchmarkByProvider(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		_ = ByProvider("aws")
+		_ = OnProvider("aws")
 	}
 }

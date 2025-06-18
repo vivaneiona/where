@@ -257,7 +257,7 @@ func TestRealWorldScenarios(t *testing.T) {
 
 		// Use discovered data
 		firstProvider := providers[0]
-		providerRegions := where.ByProvider(firstProvider)
+		providerRegions := where.OnProvider(firstProvider)
 
 		if len(providerRegions) == 0 {
 			t.Errorf("Provider %v should have regions", firstProvider)

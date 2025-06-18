@@ -9,7 +9,7 @@ The where package offers multiple intuitive APIs for region discovery:
   - Question-style API: where.Is("us-east-1"), where.Are("us-east-1", "eu-west-1")
   - Provider constants: where.AWS.USEast1, where.GCP.USCentral1, where.Azure.EastUS
   - Geographic queries: where.In.Asia(), where.In.Country("Japan")
-  - Provider filtering: where.By.AWS(), where.By.Azure(), where.By.GCP()
+  - Provider filtering: where.On.AWS(), where.On.Azure(), where.On.GCP()
   - Builder pattern: where.NewQuery().InCountry("Japan").ByProvider("aws").Exec()
 
 # Quick Start
@@ -35,7 +35,7 @@ Geographic and provider-based queries:
 	asianRegions := where.In.Asia()
 
 	// Get all AWS regions
-	awsRegions := where.By.AWS()
+	awsRegions := where.On.AWS()
 
 	// Complex query with builder pattern
 	results := where.NewQuery().
@@ -51,7 +51,7 @@ The where package is designed around natural language patterns that read like qu
   - "Where is us-east-1?" → where.Is("us-east-1")
   - "Where are these regions?" → where.Are("us-east-1", "eu-west-1")
   - "What's in Asia?" → where.In.Asia()
-  - "What does AWS have?" → where.By.AWS()
+  - "What does AWS have?" → where.On.AWS()
 
 # Provider Constants
 
@@ -101,10 +101,10 @@ Country and city-based queries:
 
 The By namespace provides provider-based region discovery:
 
-	where.By.AWS()      // All Amazon Web Services regions
-	where.By.Azure()    // All Microsoft Azure regions
-	where.By.GCP()      // All Google Cloud Platform regions
-	where.By.Provider("aws")    // Same as where.By.AWS()
+	where.On.AWS()      // All Amazon Web Services regions
+	where.On.Azure()    // All Microsoft Azure regions
+	where.On.GCP()      // All Google Cloud Platform regions
+	where.On.Provider("aws")    // Same as where.On.AWS()
 
 # Builder Pattern Queries
 
@@ -216,7 +216,7 @@ The internal region registry is read-only after package initialization.
 Find the closest AWS region to a specific location:
 
 	lat, lng := 35.6762, 139.6503 // Tokyo coordinates
-	closest := where.By.AWS().
+	closest := where.On.AWS().
 		SortByDistance(lat, lng).
 		First()
 	fmt.Printf("Closest AWS region to Tokyo: %s\n", closest.Name)
@@ -240,7 +240,7 @@ Check if a region exists and get its details:
 Find all GCP regions within 1000km of San Francisco:
 
 	sfLat, sfLng := 37.7749, -122.4194
-	nearbyGCP := where.By.GCP().WithinRadius(sfLat, sfLng, 1000)
+	nearbyGCP := where.On.GCP().WithinRadius(sfLat, sfLng, 1000)
 	fmt.Printf("Found %d GCP regions within 1000km of SF\n", len(nearbyGCP))
 
 # Version Compatibility
