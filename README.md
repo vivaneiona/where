@@ -1,5 +1,7 @@
 # where
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/vivaneiona/where.svg)](https://pkg.go.dev/github.com/vivaneiona/where)
+
 A Go library for discovering, querying, and working with cloud provider region names and codes across different cloud service providers.
 
 ```bash
