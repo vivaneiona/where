@@ -31,6 +31,7 @@ var AWS = struct {
 	APSoutheast2 Code // ap-southeast-2 (Sydney)
 	APSoutheast3 Code // ap-southeast-3 (Jakarta)
 	APSoutheast4 Code // ap-southeast-4 (Melbourne)
+	APSoutheast5 Code // ap-southeast-5 (Kuala Lumpur)
 	APEast1      Code // ap-east-1 (Hong Kong)
 	APNortheast1 Code // ap-northeast-1 (Tokyo)
 	APNortheast2 Code // ap-northeast-2 (Seoul)
@@ -39,9 +40,14 @@ var AWS = struct {
 	// Middle East
 	MESouth1   Code // me-south-1 (Bahrain)
 	MECentral1 Code // me-central-1 (UAE)
+	ILCentral1 Code // il-central-1 (Tel Aviv)
 
 	// Africa
 	AFSouth1 Code // af-south-1 (Cape Town)
+
+	// China
+	CNNorth1     Code // cn-north-1 (Beijing)
+	CNNorthwest1 Code // cn-northwest-1 (Ningxia)
 
 	// Government (US)
 	USGovEast1 Code // us-gov-east-1
@@ -69,13 +75,17 @@ var AWS = struct {
 	APSoutheast2: "ap-southeast-2",
 	APSoutheast3: "ap-southeast-3",
 	APSoutheast4: "ap-southeast-4",
+	APSoutheast5: "ap-southeast-5",
 	APEast1:      "ap-east-1",
 	APNortheast1: "ap-northeast-1",
 	APNortheast2: "ap-northeast-2",
 	APNortheast3: "ap-northeast-3",
 	MESouth1:     "me-south-1",
 	MECentral1:   "me-central-1",
+	ILCentral1:   "il-central-1",
 	AFSouth1:     "af-south-1",
+	CNNorth1:     "cn-north-1",
+	CNNorthwest1: "cn-northwest-1",
 	USGovEast1:   "us-gov-east-1",
 	USGovWest1:   "us-gov-west-1",
 }
@@ -107,6 +117,13 @@ var Azure = struct {
 	NorwayWest         Code // norwaywest
 	SwitzerlandNorth   Code // switzerlandnorth
 	SwitzerlandWest    Code // switzerlandwest
+	SwedenCentral      Code // swedencentral
+	SwedenSouth        Code // swedensouth
+	PolandCentral      Code // polandcentral
+	SpainCentral       Code // spaincentral
+	ItalyNorth         Code // italynorth
+	IsraelCentral      Code // israelcentral
+	AustriaEast        Code // austriaeast
 
 	// Asia Pacific
 	EastAsia           Code // eastasia
@@ -126,11 +143,20 @@ var Azure = struct {
 	// Middle East & Africa
 	UAENorth         Code // uaenorth
 	UAECentral       Code // uaecentral
+	QatarCentral     Code // qatarcentral
 	SouthAfricaNorth Code // southafricanorth
 	SouthAfricaWest  Code // southafricawest
 
 	// South America
-	BrazilSouth Code // brazilsouth
+	BrazilSouth     Code // brazilsouth
+	BrazilSoutheast Code // brazilsoutheast
+	ChileCentral    Code // chilecentral
+
+	// North America
+	MexicoCentral Code // mexicocentral
+
+	// Oceania
+	NewZealandNorth Code // newzealandnorth
 }{
 	EastUS:             "eastus",
 	EastUS2:            "eastus2",
@@ -154,6 +180,13 @@ var Azure = struct {
 	NorwayWest:         "norwaywest",
 	SwitzerlandNorth:   "switzerlandnorth",
 	SwitzerlandWest:    "switzerlandwest",
+	SwedenCentral:      "swedencentral",
+	SwedenSouth:        "swedensouth",
+	PolandCentral:      "polandcentral",
+	SpainCentral:       "spaincentral",
+	ItalyNorth:         "italynorth",
+	IsraelCentral:      "israelcentral",
+	AustriaEast:        "austriaeast",
 	EastAsia:           "eastasia",
 	SoutheastAsia:      "southeastasia",
 	AustraliaEast:      "australiaeast",
@@ -169,9 +202,14 @@ var Azure = struct {
 	WestIndia:          "westindia",
 	UAENorth:           "uaenorth",
 	UAECentral:         "uaecentral",
+	QatarCentral:       "qatarcentral",
 	SouthAfricaNorth:   "southafricanorth",
 	SouthAfricaWest:    "southafricawest",
 	BrazilSouth:        "brazilsouth",
+	BrazilSoutheast:    "brazilsoutheast",
+	ChileCentral:       "chilecentral",
+	MexicoCentral:      "mexicocentral",
+	NewZealandNorth:    "newzealandnorth",
 }
 
 // GCP provides direct access to all Google Cloud Platform regions.
@@ -185,6 +223,7 @@ var GCP = struct {
 	USWest2                Code // us-west2 (Los Angeles)
 	USWest3                Code // us-west3 (Salt Lake City)
 	USWest4                Code // us-west4 (Las Vegas)
+	USSouth1               Code // us-south1 (Texas)
 	NorthamericaNortheast1 Code // northamerica-northeast1 (Montreal)
 	NorthamericaNortheast2 Code // northamerica-northeast2 (Toronto)
 
@@ -237,6 +276,7 @@ var GCP = struct {
 	USWest2:                "us-west2",
 	USWest3:                "us-west3",
 	USWest4:                "us-west4",
+	USSouth1:               "us-south1",
 	NorthamericaNortheast1: "northamerica-northeast1",
 	NorthamericaNortheast2: "northamerica-northeast2",
 	SouthamericaEast1:      "southamerica-east1",
@@ -273,46 +313,37 @@ var GCP = struct {
 // Yandex provides direct access to all Yandex Cloud regions.
 var Yandex = struct {
 	RUCentral1 Code // ru-central1 (Moscow)
-	RUCentral2 Code // ru-central2 (Moscow)
-	RUCentral3 Code // ru-central3 (Moscow)
+	KZ1        Code // kz1 (Kazakhstan)
 }{
 	RUCentral1: "ru-central1",
-	RUCentral2: "ru-central2",
-	RUCentral3: "ru-central3",
-}
-
-// VK provides direct access to all VK Cloud regions.
-var VK = struct {
-	Moscow1     Code // moscow-1
-	Moscow2     Code // moscow-2
-	SPB1        Code // spb-1 (Saint Petersburg)
-	Kazakhstan1 Code // kazakhstan-1
-}{
-	Moscow1:     "moscow-1",
-	Moscow2:     "moscow-2",
-	SPB1:        "spb-1",
-	Kazakhstan1: "kazakhstan-1",
+	KZ1:        "kz1",
 }
 
 // Alibaba provides direct access to all Alibaba Cloud regions.
 var Alibaba = struct {
 	// China
-	CNHangzhou    Code // cn-hangzhou
-	CNShanghai    Code // cn-shanghai
-	CNBeijing     Code // cn-beijing
-	CNShenzhen    Code // cn-shenzhen
 	CNQingdao     Code // cn-qingdao
+	CNBeijing     Code // cn-beijing
 	CNZhangjiakou Code // cn-zhangjiakou
 	CNHuhehaote   Code // cn-huhehaote
-	CNChengdu     Code // cn-chengdu
+	CNWulanchabu  Code // cn-wulanchabu
+	CNHangzhou    Code // cn-hangzhou
+	CNShanghai    Code // cn-shanghai
+	CNNanjing     Code // cn-nanjing
+	CNFuzhou      Code // cn-fuzhou
+	CNWuhanLR     Code // cn-wuhan-lr
+	CNShenzhen    Code // cn-shenzhen
 	CNHeyuan      Code // cn-heyuan
 	CNGuangzhou   Code // cn-guangzhou
+	CNChengdu     Code // cn-chengdu
+	CNHongkong    Code // cn-hongkong
 
 	// Asia Pacific
 	APSoutheast1 Code // ap-southeast-1 (Singapore)
-	APSoutheast2 Code // ap-southeast-2 (Sydney)
 	APSoutheast3 Code // ap-southeast-3 (Kuala Lumpur)
 	APSoutheast5 Code // ap-southeast-5 (Jakarta)
+	APSoutheast6 Code // ap-southeast-6 (Manila)
+	APSoutheast7 Code // ap-southeast-7 (Bangkok)
 	APSouth1     Code // ap-south-1 (Mumbai)
 	APNortheast1 Code // ap-northeast-1 (Tokyo)
 	APNortheast2 Code // ap-northeast-2 (Seoul)
@@ -324,22 +355,32 @@ var Alibaba = struct {
 	USWest1    Code // us-west-1 (Silicon Valley)
 
 	// Middle East & Africa
-	MEEast1 Code // me-east-1 (Dubai)
+	MEEast1    Code // me-east-1 (Dubai)
+	MECentral1 Code // me-central-1 (Riyadh)
+
+	// North America
+	NASouth1 Code // na-south-1 (Mexico)
 }{
-	CNHangzhou:    "cn-hangzhou",
-	CNShanghai:    "cn-shanghai",
-	CNBeijing:     "cn-beijing",
-	CNShenzhen:    "cn-shenzhen",
 	CNQingdao:     "cn-qingdao",
+	CNBeijing:     "cn-beijing",
 	CNZhangjiakou: "cn-zhangjiakou",
 	CNHuhehaote:   "cn-huhehaote",
-	CNChengdu:     "cn-chengdu",
+	CNWulanchabu:  "cn-wulanchabu",
+	CNHangzhou:    "cn-hangzhou",
+	CNShanghai:    "cn-shanghai",
+	CNNanjing:     "cn-nanjing",
+	CNFuzhou:      "cn-fuzhou",
+	CNWuhanLR:     "cn-wuhan-lr",
+	CNShenzhen:    "cn-shenzhen",
 	CNHeyuan:      "cn-heyuan",
 	CNGuangzhou:   "cn-guangzhou",
+	CNChengdu:     "cn-chengdu",
+	CNHongkong:    "cn-hongkong",
 	APSoutheast1:  "ap-southeast-1",
-	APSoutheast2:  "ap-southeast-2",
 	APSoutheast3:  "ap-southeast-3",
 	APSoutheast5:  "ap-southeast-5",
+	APSoutheast6:  "ap-southeast-6",
+	APSoutheast7:  "ap-southeast-7",
 	APSouth1:      "ap-south-1",
 	APNortheast1:  "ap-northeast-1",
 	APNortheast2:  "ap-northeast-2",
@@ -348,4 +389,6 @@ var Alibaba = struct {
 	USEast1:       "us-east-1",
 	USWest1:       "us-west-1",
 	MEEast1:       "me-east-1",
+	MECentral1:    "me-central-1",
+	NASouth1:      "na-south-1",
 }

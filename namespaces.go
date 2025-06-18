@@ -16,7 +16,6 @@ const (
 	ProviderAzure   = "azure"
 	ProviderGCP     = "gcp"
 	ProviderYandex  = "yandex"
-	ProviderVK      = "vk"
 	ProviderAlibaba = "alibaba"
 )
 
@@ -92,11 +91,6 @@ func (OnNamespace) Yandex() Set {
 	return OnProvider(ProviderYandex)
 }
 
-// VK returns all VK Cloud regions.
-func (OnNamespace) VK() Set {
-	return OnProvider(ProviderVK)
-}
-
 // Alibaba returns all Alibaba Cloud regions.
 func (OnNamespace) Alibaba() Set {
 	return OnProvider(ProviderAlibaba)
@@ -147,7 +141,8 @@ func (NearNamespace) Location(lat, lng, radiusKm float64) Set {
 
 // Region returns regions within the specified radius of another region.
 func (NearNamespace) Region(code Code, radiusKm float64) (Set, error) {
-	region, err := Is(code)
+	query := Is(code)
+	region, err := query.First()
 	if err != nil {
 		return nil, err
 	}

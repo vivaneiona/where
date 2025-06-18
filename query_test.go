@@ -21,7 +21,7 @@ func TestQueryChaining(t *testing.T) {
 	t.Run("method chaining", func(t *testing.T) {
 		q := NewQuery().
 			InCountry("United States").
-			ByProvider("aws").
+			OnProvider("aws").
 			ActiveOnly()
 
 		if q == nil {
@@ -105,7 +105,7 @@ func TestQueryFilters(t *testing.T) {
 		{
 			name: "ByProvider",
 			filter: func(q *Query) *Query {
-				return q.ByProvider("aws")
+				return q.OnProvider("aws")
 			},
 			verify: func(regions Set) error {
 				for _, region := range regions {
@@ -136,7 +136,7 @@ func TestQueryFilters(t *testing.T) {
 func TestQuerySorting(t *testing.T) {
 	t.Run("SortByName", func(t *testing.T) {
 		regions := NewQuery().
-			ByProvider("aws").
+			OnProvider("aws").
 			SortByName().
 			Exec()
 
@@ -152,7 +152,7 @@ func TestQuerySorting(t *testing.T) {
 	t.Run("SortByDistance", func(t *testing.T) {
 		// Sort by distance from NYC
 		regions := NewQuery().
-			ByProvider("aws").
+			OnProvider("aws").
 			SortByDistance(40.7128, -74.0060).
 			Exec()
 
@@ -178,7 +178,7 @@ func TestQueryLimits(t *testing.T) {
 	t.Run("Limit", func(t *testing.T) {
 		limit := 3
 		regions := NewQuery().
-			ByProvider("aws").
+			OnProvider("aws").
 			Limit(limit).
 			Exec()
 
@@ -189,7 +189,7 @@ func TestQueryLimits(t *testing.T) {
 
 	t.Run("First", func(t *testing.T) {
 		region, err := NewQuery().
-			ByProvider("aws").
+			OnProvider("aws").
 			First()
 
 		if err != nil {
@@ -213,7 +213,7 @@ func TestQueryLimits(t *testing.T) {
 
 func TestQueryErrorHandling(t *testing.T) {
 	t.Run("no errors on valid query", func(t *testing.T) {
-		q := NewQuery().ByProvider("aws")
+		q := NewQuery().OnProvider("aws")
 		regions, errors := q.ExecWithErrors()
 
 		if len(errors) != 0 {
@@ -240,8 +240,8 @@ func TestQueryEdgeCases(t *testing.T) {
 
 	t.Run("multiple providers", func(t *testing.T) {
 		// This should work as providers are OR'd in typical implementations
-		awsRegions := NewQuery().ByProvider("aws").Exec()
-		azureRegions := NewQuery().ByProvider("azure").Exec()
+		awsRegions := NewQuery().OnProvider("aws").Exec()
+		azureRegions := NewQuery().OnProvider("azure").Exec()
 
 		if len(awsRegions) == 0 && len(azureRegions) == 0 {
 			t.Skip("No AWS or Azure regions found")
@@ -251,7 +251,7 @@ func TestQueryEdgeCases(t *testing.T) {
 	t.Run("complex chaining", func(t *testing.T) {
 		regions := NewQuery().
 			InContinent("North America").
-			ByProvider("aws").
+			OnProvider("aws").
 			ActiveOnly().
 			SortByName().
 			Limit(5).
@@ -281,7 +281,7 @@ func BenchmarkQueryChaining(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		_ = NewQuery().
 			InCountry("United States").
-			ByProvider("aws").
+			OnProvider("aws").
 			ActiveOnly().
 			Exec()
 	}
@@ -290,7 +290,7 @@ func BenchmarkQueryChaining(b *testing.B) {
 func BenchmarkQuerySort(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		_ = NewQuery().
-			ByProvider("aws").
+			OnProvider("aws").
 			SortByDistance(40.7128, -74.0060).
 			Exec()
 	}

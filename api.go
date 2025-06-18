@@ -16,18 +16,20 @@ var (
 
 // Question-style API functions that read like natural English
 
-// Is answers "where is {code}?" - returns detailed information about a specific region.
-func Is(code Code) (Region, error) {
-	region, exists := regionRegistry[code]
+// Is answers "where is {code}?" - returns a query that can be filtered by provider.
+// Usage: Is("us-east-1").OnAWS() or Is("us-east-1").First()
+func Is(code Code) RegionQuery {
+	regions, exists := regionRegistry[code]
 	if !exists {
-		return Region{}, fmt.Errorf("%w: %s", ErrRegionNotFound, code)
+		return RegionQuery{regions: []Region{}}
 	}
-	return region, nil
+	return RegionQuery{regions: regions}
 }
 
-// MustIs is like Is but panics on error. Use when you're certain the region exists.
+// MustIs is like Is().First() but panics on error. Use when you're certain the region exists.
 func MustIs(code Code) Region {
-	region, err := Is(code)
+	query := Is(code)
+	region, err := query.First()
 	if err != nil {
 		panic(err)
 	}
@@ -40,8 +42,9 @@ func Are(codes ...Code) (Set, error) {
 	var notFound []Code
 
 	for _, code := range codes {
-		if region, exists := regionRegistry[code]; exists {
-			regions = append(regions, region)
+		if regionList, exists := regionRegistry[code]; exists {
+			// Add all regions for this code to the result
+			regions = append(regions, regionList...)
 		} else {
 			notFound = append(notFound, code)
 		}
@@ -71,7 +74,7 @@ func InContinent(name string) Set {
 
 // OnProvider answers "where by provider {name}?" - returns all regions from a provider.
 func OnProvider(name string) Set {
-	return allRegions().ByProvider(name)
+	return allRegions().OnProvider(name)
 }
 
 // Near answers "where near {location} within {radius}km?" - requires coordinates.
@@ -108,17 +111,24 @@ func Has(code string) bool {
 
 // IsActive answers "where active {code}?" - true if region is currently active.
 func IsActive(code Code) bool {
-	if region, exists := regionRegistry[code]; exists {
-		return region.IsActive()
+	if regionList, exists := regionRegistry[code]; exists {
+		// Return true if any region with this code is active
+		for _, region := range regionList {
+			if region.IsActive() {
+				return true
+			}
+		}
 	}
 	return false
 }
 
 // HasProvider answers "where has provider {name}?" - checks if a provider exists.
 func HasProvider(name string) bool {
-	for _, region := range regionRegistry {
-		if strings.EqualFold(region.Provider, name) {
-			return true
+	for _, regionList := range regionRegistry {
+		for _, region := range regionList {
+			if strings.EqualFold(region.Provider, name) {
+				return true
+			}
 		}
 	}
 	return false
@@ -129,8 +139,10 @@ func HasProvider(name string) bool {
 // Providers answers "where providers?" - returns all unique provider names.
 func Providers() []string {
 	providerMap := make(map[string]bool)
-	for _, region := range regionRegistry {
-		providerMap[region.Provider] = true
+	for _, regionList := range regionRegistry {
+		for _, region := range regionList {
+			providerMap[region.Provider] = true
+		}
 	}
 
 	providers := make([]string, 0, len(providerMap))
@@ -143,8 +155,10 @@ func Providers() []string {
 // Countries answers "where countries?" - returns all unique country names.
 func Countries() []string {
 	countryMap := make(map[string]bool)
-	for _, region := range regionRegistry {
-		countryMap[region.Country] = true
+	for _, regionList := range regionRegistry {
+		for _, region := range regionList {
+			countryMap[region.Country] = true
+		}
 	}
 
 	countries := make([]string, 0, len(countryMap))
@@ -157,8 +171,10 @@ func Countries() []string {
 // Cities answers "where cities?" - returns all unique city names.
 func Cities() []string {
 	cityMap := make(map[string]bool)
-	for _, region := range regionRegistry {
-		cityMap[region.City] = true
+	for _, regionList := range regionRegistry {
+		for _, region := range regionList {
+			cityMap[region.City] = true
+		}
 	}
 
 	cities := make([]string, 0, len(cityMap))
@@ -171,8 +187,10 @@ func Cities() []string {
 // Continents answers "where continents?" - returns all unique continent names.
 func Continents() []string {
 	continentMap := make(map[string]bool)
-	for _, region := range regionRegistry {
-		continentMap[region.Continent] = true
+	for _, regionList := range regionRegistry {
+		for _, region := range regionList {
+			continentMap[region.Continent] = true
+		}
 	}
 
 	continents := make([]string, 0, len(continentMap))
@@ -183,13 +201,16 @@ func Continents() []string {
 }
 
 // Distance calculates the distance between two regions in kilometers.
+// If multiple regions exist for a code, uses the first region.
 func Distance(from, to Code) (float64, error) {
-	fromRegion, err := Is(from)
+	fromQuery := Is(from)
+	fromRegion, err := fromQuery.First()
 	if err != nil {
 		return 0, fmt.Errorf("source region %w", err)
 	}
 
-	toRegion, err := Is(to)
+	toQuery := Is(to)
+	toRegion, err := toQuery.First()
 	if err != nil {
 		return 0, fmt.Errorf("destination region %w", err)
 	}
@@ -198,8 +219,10 @@ func Distance(from, to Code) (float64, error) {
 }
 
 // Closest finds the closest region to the specified region.
+// If multiple regions exist for a code, uses the first region.
 func Closest(to Code) (Region, error) {
-	target, err := Is(to)
+	targetQuery := Is(to)
+	target, err := targetQuery.First()
 	if err != nil {
 		return Region{}, err
 	}
@@ -207,15 +230,17 @@ func Closest(to Code) (Region, error) {
 	var closest Region
 	minDistance := math.MaxFloat64
 
-	for _, region := range regionRegistry {
-		if region.Code == to {
-			continue // Skip the target region itself
-		}
+	for _, regionList := range regionRegistry {
+		for _, region := range regionList {
+			if region.Code == to {
+				continue // Skip the target region itself
+			}
 
-		distance := target.Distance(region)
-		if distance < minDistance {
-			minDistance = distance
-			closest = region
+			distance := target.Distance(region)
+			if distance < minDistance {
+				minDistance = distance
+				closest = region
+			}
 		}
 	}
 
@@ -228,9 +253,9 @@ func Closest(to Code) (Region, error) {
 
 // allRegions returns all regions as a Set.
 func allRegions() Set {
-	regions := make(Set, 0, len(regionRegistry))
-	for _, region := range regionRegistry {
-		regions = append(regions, region)
+	regions := make(Set, 0)
+	for _, regionList := range regionRegistry {
+		regions = append(regions, regionList...)
 	}
 	return regions
 }

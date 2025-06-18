@@ -30,7 +30,8 @@ func TestIs(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			region, err := Is(tt.code)
+			query := Is(tt.code)
+			region, err := query.First()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Is() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -81,13 +82,13 @@ func TestAre(t *testing.T) {
 		{
 			name:    "all valid regions",
 			codes:   []Code{"us-east-1", "us-west-2"},
-			wantLen: 2,
+			wantLen: 3,
 			wantErr: false,
 		},
 		{
 			name:     "mixed valid and invalid",
 			codes:    []Code{"us-east-1", "invalid", "us-west-2"},
-			wantLen:  2,
+			wantLen:  3,
 			wantErr:  true,
 			errCount: 1,
 		},
@@ -336,7 +337,8 @@ func TestFilteredQueries(t *testing.T) {
 // Benchmark critical API functions
 func BenchmarkIs(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		_, _ = Is("us-east-1")
+		query := Is("us-east-1")
+		_, _ = query.First()
 	}
 }
 

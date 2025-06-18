@@ -153,7 +153,7 @@ func TestSet_ByProvider(t *testing.T) {
 		{Code: "eastus", Provider: "azure"},
 	}
 
-	awsRegions := regions.ByProvider("aws")
+	awsRegions := regions.OnProvider("aws")
 	if len(awsRegions) != 2 {
 		t.Errorf("Expected 2 AWS regions, got %d", len(awsRegions))
 	}

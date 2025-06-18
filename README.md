@@ -8,6 +8,10 @@ A Go library for discovering, querying, and working with cloud provider region n
 go get github.com/vivaneiona/where@v0.202506.2
 ```
 
+## Important Notes
+
+**Duplicate Region Codes**: Some region codes (like `us-east-1`) exist across multiple cloud providers. When querying these codes, the library returns all matching regions from different providers. For example, `where.Are("us-east-1")` returns regions from both AWS and Alibaba Cloud. Use provider-specific queries if you need regions from a particular provider.
+
 ## Usage Examples
 
 ```go
@@ -62,10 +66,13 @@ func basicLookupExample() {
 	//   Provider: aws
 	//   Status: active
 	//   Launched: 2006-08-25
-	//   Found 3 regions
+	//   Found 5 regions (includes duplicates across providers)
+	//   us-east-1 appears in 2 providers:
+	//     aws: US East (N. Virginia)
+	//     alibaba: US East 1
 
-	// Single region lookup
-	region, err := where.Is("us-east-1")
+	// Single region lookup (note: us-east-1 exists in multiple providers)
+	region, err := where.Is("us-east-1").First()
 	if err != nil {
 		log.Printf("Error: %v", err)
 		return
@@ -76,13 +83,20 @@ func basicLookupExample() {
 	fmt.Printf("  Status: %s\n", region.Status)
 	fmt.Printf("  Launched: %s\n", region.LaunchDate.Format("2006-01-02"))
 
-	// Multiple regions lookup
+	// Multiple regions lookup - includes duplicates across providers
 	regions, err := where.Are("us-east-1", "eu-west-1", "ap-southeast-1")
 	if err != nil {
 		log.Printf("Error: %v", err)
 		return
 	}
-	fmt.Printf("  Found %d regions\n", len(regions))
+	fmt.Printf("  Found %d regions (includes duplicates across providers)\n", len(regions))
+	
+	// Show duplicate region codes across providers
+	regions, _ := where.Are("us-east-1")
+	fmt.Printf("  us-east-1 appears in %d providers:\n", len(duplicateRegions))
+	for _, r := range regions {
+		fmt.Printf("    %s: %s\n", r.Provider, r.Name)
+	}
 	fmt.Println()
 }
 

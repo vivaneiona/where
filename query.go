@@ -71,40 +71,35 @@ func (q *Query) InAfrica() *Query {
 	return q.InContinent("Africa")
 }
 
-// ByProvider filters regions by cloud provider name.
-func (q *Query) ByProvider(name string) *Query {
-	q.regions = q.regions.ByProvider(name)
+// OnProvider filters regions by cloud provider name.
+func (q *Query) OnProvider(name string) *Query {
+	q.regions = q.regions.OnProvider(name)
 	return q
 }
 
-// ByAWS filters to only AWS regions.
-func (q *Query) ByAWS() *Query {
-	return q.ByProvider("aws")
+// OnAWS filters to only AWS regions.
+func (q *Query) OnAWS() *Query {
+	return q.OnProvider("aws")
 }
 
-// ByAzure filters to only Azure regions.
-func (q *Query) ByAzure() *Query {
-	return q.ByProvider("azure")
+// OnAzure filters to only Azure regions.
+func (q *Query) OnAzure() *Query {
+	return q.OnProvider("azure")
 }
 
-// ByGCP filters to only Google Cloud Platform regions.
-func (q *Query) ByGCP() *Query {
-	return q.ByProvider("gcp")
+// OnGCP filters to only Google Cloud Platform regions.
+func (q *Query) OnGCP() *Query {
+	return q.OnProvider("gcp")
 }
 
-// ByYandex filters to only Yandex Cloud regions.
-func (q *Query) ByYandex() *Query {
-	return q.ByProvider("yandex")
+// OnYandex filters to only Yandex Cloud regions.
+func (q *Query) OnYandex() *Query {
+	return q.OnProvider("yandex")
 }
 
-// ByVK filters to only VK Cloud regions.
-func (q *Query) ByVK() *Query {
-	return q.ByProvider("vk")
-}
-
-// ByAlibaba filters to only Alibaba Cloud regions.
-func (q *Query) ByAlibaba() *Query {
-	return q.ByProvider("alibaba")
+// OnAlibaba filters to only Alibaba Cloud regions.
+func (q *Query) OnAlibaba() *Query {
+	return q.OnProvider("alibaba")
 }
 
 // ActiveOnly filters to only active regions.
@@ -137,7 +132,8 @@ func (q *Query) Near(lat, lng float64, radiusKm float64) *Query {
 
 // NearRegion filters regions within the specified radius of another region.
 func (q *Query) NearRegion(code Code, radiusKm float64) *Query {
-	region, err := Is(code)
+	query := Is(code)
+	region, err := query.First()
 	if err != nil {
 		q.errors = append(q.errors, err)
 		return q

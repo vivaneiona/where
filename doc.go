@@ -16,11 +16,18 @@ The where package offers multiple intuitive APIs for region discovery:
 
 Basic region lookup:
 
-	region, err := where.Is("us-east-1")
+	region, err := where.Is("us-east-1").First()
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Printf("Region: %s in %s, %s\n", region.Name, region.City, region.Country)
+
+	// Get ALL regions with a code
+	regions, err := where.Are("us-east-1")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Found %d regions with code us-east-1\n", len(regions))
 
 Provider constants for type-safe, zero-allocation access:
 
@@ -48,10 +55,14 @@ Geographic and provider-based queries:
 
 The where package is designed around natural language patterns that read like questions:
 
-  - "Where is us-east-1?" → where.Is("us-east-1")
-  - "Where are these regions?" → where.Are("us-east-1", "eu-west-1")
+  - "Where is us-east-1?" → where.Is("us-east-1") [returns first match]
+  - "Where are these regions?" → where.Are("us-east-1", "eu-west-1") [returns all matches]
   - "What's in Asia?" → where.In.Asia()
   - "What does AWS have?" → where.On.AWS()
+
+**Note**: Some region codes exist across multiple providers (e.g., "us-east-1"
+in both AWS and Alibaba). The Are() function returns ALL matching regions.
+Use provider-specific queries or constants for precise control.
 
 # Provider Constants
 

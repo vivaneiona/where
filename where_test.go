@@ -40,7 +40,8 @@ func TestIntegration(t *testing.T) {
 			t.Skip("us-east-1 not available for integration test")
 		}
 
-		region, err := where.Is("us-east-1")
+		query := where.Is("us-east-1")
+		region, err := query.First()
 		if err != nil {
 			t.Fatalf("Failed to get us-east-1: %v", err)
 		}
@@ -66,7 +67,7 @@ func TestIntegration(t *testing.T) {
 		// Test complex query workflow
 		usAwsRegions := where.NewQuery().
 			InCountry("United States").
-			ByProvider("aws").
+			OnProvider("aws").
 			ActiveOnly().
 			SortByName().
 			Exec()
@@ -140,7 +141,8 @@ func TestIntegration(t *testing.T) {
 
 	t.Run("error scenarios", func(t *testing.T) {
 		// Test error conditions
-		_, err := where.Is("nonexistent-region")
+		query := where.Is("nonexistent-region")
+		_, err := query.First()
 		if err == nil {
 			t.Error("Should get error for nonexistent region")
 		}
@@ -269,14 +271,15 @@ func Example_integration() {
 	// Check if a region exists
 	if where.Has("us-east-1") {
 		// Get region details
-		region, _ := where.Is("us-east-1")
+		query := where.Is("us-east-1")
+		region, _ := query.First()
 		fmt.Printf("Region: %s in %s\n", region.Name, region.Country)
 	}
 
 	// Find all AWS regions in the US
 	usAws := where.NewQuery().
 		InCountry("United States").
-		ByProvider("aws").
+		OnProvider("aws").
 		ActiveOnly().
 		Exec()
 

@@ -48,6 +48,7 @@ type Region struct {
 	Longitude  float64   `json:"longitude"`
 	Status     Status    `json:"status"`
 	LaunchDate time.Time `json:"launch_date"`
+	Zones      []string  `json:"zones"`
 }
 
 // Distance calculates the great-circle distance to another region in kilometers.
@@ -79,8 +80,8 @@ func (s Set) Filter(predicate func(Region) bool) Set {
 	return result
 }
 
-// ByProvider filters regions by cloud provider name.
-func (s Set) ByProvider(name string) Set {
+// OnProvider filters regions by cloud provider name.
+func (s Set) OnProvider(name string) Set {
 	return s.Filter(func(r Region) bool {
 		return strings.EqualFold(r.Provider, name)
 	})
@@ -268,4 +269,58 @@ func haversineDistance(lat1, lng1, lat2, lng2 float64) float64 {
 	c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
 
 	return earthRadiusKm * c
+}
+
+// RegionQuery allows filtering regions by provider after lookup by code.
+// This enables patterns like: where.Is("us-east-1").OnAWS()
+type RegionQuery struct {
+	regions []Region
+}
+
+// OnAWS filters the query results to only AWS regions.
+func (rq RegionQuery) OnAWS() (Region, error) {
+	return rq.OnProvider("aws")
+}
+
+// OnAzure filters the query results to only Azure regions.
+func (rq RegionQuery) OnAzure() (Region, error) {
+	return rq.OnProvider("azure")
+}
+
+// OnGCP filters the query results to only GCP regions.
+func (rq RegionQuery) OnGCP() (Region, error) {
+	return rq.OnProvider("gcp")
+}
+
+// OnAlibaba filters the query results to only Alibaba regions.
+func (rq RegionQuery) OnAlibaba() (Region, error) {
+	return rq.OnProvider("alibaba")
+}
+
+// OnYandex filters the query results to only Yandex regions.
+func (rq RegionQuery) OnYandex() (Region, error) {
+	return rq.OnProvider("yandex")
+}
+
+// OnProvider filters the query results to only regions from the specified provider.
+func (rq RegionQuery) OnProvider(provider string) (Region, error) {
+	for _, region := range rq.regions {
+		if strings.EqualFold(region.Provider, provider) {
+			return region, nil
+		}
+	}
+	return Region{}, fmt.Errorf("%w: no region found for provider %s", ErrRegionNotFound, provider)
+}
+
+// All returns all matching regions for the code (useful when multiple providers have the same code).
+func (rq RegionQuery) All() []Region {
+	return rq.regions
+}
+
+// First returns the first matching region.
+func (rq RegionQuery) First() (Region, error) {
+	if len(rq.regions) == 0 {
+		return Region{}, fmt.Errorf("%w", ErrRegionNotFound)
+	}
+	return rq.regions[0], nil
 }
